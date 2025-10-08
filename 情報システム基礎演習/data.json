@@ -1,0 +1,13 @@
+{
+  "question": "その教授は眼鏡をかけていますか？",
+  "yes": {
+    "question": "その教授はですか？",
+    "yes": { "character": "A" },
+    "no": { "character": "B" }
+  },
+  "no": {
+    "question": "そのキャラは動物ですか？",
+    "yes": { "character": "" },
+    "no": { "character": "" }
+  }
+}

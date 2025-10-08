@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Flask版アキネイター</title>
+  <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 100px;
+    }
+    button {
+      font-size: 1.2em;
+      margin: 10px;
+      padding: 10px 25px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎩 Flask版アキネイター 🎩</h1>
+  <div id="question">読み込み中...</div>
+  <div id="buttons"></div>
+</body>
+</html>

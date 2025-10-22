@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>教員アキネイター</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 100px;
+      background-image: url("{{ url_for('static', filename='J-PEAKS_top.jpg') }}");
+      background-size: cover;        /* 画面全体に広げる */
+      background-position: center;   /* 中央に配置 */
+      background-repeat: no-repeat;  /* 繰り返しなし */
+    }
+    h1 {
+      font-size: 2.5em;
+      color: white;
+      margin-bottom: 30px;
+    }
+    button { font-size: 24px; padding: 12px 40px; border-radius: 12px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <img src="{{ url_for('static', filename='kyozyu_akinater.png') }}">
+  <h1>🎩 教員アキネイター 🎩</h1>
+  <button onclick="location.href='/play'">プレイする</button>
+</body>
+</html>

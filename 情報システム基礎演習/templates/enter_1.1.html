@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>教員アキネイター</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 100px;
+      background-image: url("{{ url_for('static', filename='haikei.png') }}");
+      background-size: cover;        /* 画面全体に広げる */
+      background-position: center;   /* 中央に配置 */
+      background-repeat: no-repeat;  /* 繰り返しなし */
+    }
+    .logo {
+      position: relative;
+      right: -100px;    /* 右端から少し左 */
+      height: auto;
+    }
+    .play-btn {
+      display: block;
+      margin: 0px auto 0 auto;  /* 中央へ */
+      font-size: 24px;
+      padding: 12px 40px;
+      border-radius: 12px;
+      cursor: pointer;
+      border: none;
+      background-color: #007BFF;
+      color: white;
+      transition: 0.2s;
+    }
+    .play-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <img src="{{ url_for('static', filename='kyozyu_akinater.png') }}">
+  <img src="{{ url_for('static', filename='logo.png') }}" class="logo">>
+  <button class="play-btn" onclick="location.href='/play'">プレイする</button>
+</body>
+</body>
+</html>

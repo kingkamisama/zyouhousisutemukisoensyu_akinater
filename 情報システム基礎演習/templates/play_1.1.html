@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>プレイ中 - 教員アキネイター</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      text-align: center;
+      margin-top: 80px;
+      background-color: #f8f8ff;
+    }
+
+    /* 全体を中央寄せ */
+    .container {
+      position: relative;  /* ← ここを追加 */
+      display: block; 
+    height: 400px; /* 魔人+吹き出しが収まる高さ */
+   }
+
+    .image-area {
+    position: absolute;
+    left: 200px;  /* 魔人の左端位置 */
+    bottom: -10;    /* 下に揃える */
+    width: 360px;
+    }
+
+    .question-area {
+    position: absolute;
+    left: 650px;  /* 魔人の右側に吹き出し */
+    top: 50px;    /* 上からの位置調整 */
+    width: 500px;
+    text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+    }
+
+
+  #question {
+    font-size: 22px;
+    margin-bottom: 30px;
+    padding: 0px 30px 50px 30px;
+    text-align: center;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.4;
+    position: relative;
+    z-index: 1;
+  }
+
+  #question::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -20px;  /* ← 左方向に移動 */
+    width: 500px;  /* 吹き出し画像の幅 */
+    height: 200px; /* 高さ */
+    background-image: url("{{ url_for('static', filename='hukidasi.png') }}");
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: -1;   /* テキストの下に表示 */
+  }
+  #result-img {
+  width: 300px;          /* 好きなサイズに */
+  height: auto;
+  margin: 20px auto;     /* 上下に余白、中央寄せ */
+  display: none;         /* 最初は非表示 */
+  border-radius: 12px;
+  }
+
+    button {
+      font-size: 22px;
+      margin: 10px;
+      padding: 10px 25px;
+      border-radius: 10px;
+      cursor: pointer;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 左側：画像 -->
+    <div class="image-area">
+      <img src="{{ url_for('static', filename='kyozyu_akinater.png') }}" alt="アキネイター教授">
+    </div>
+
+    <!-- 右側：質問文とボタン -->
+    <div class="question-area">
+      <h2 id="question">読み込み中...</h2>
+
+      <img id="result-img" src="" alt="結果画像" style="display:none; width:300px; margin-bottom:20px;">
+
+      <div id="btn-area">
+        <button id="yes-btn">はい</button>
+        <button id="no-btn">いいえ</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const questionText = document.getElementById("question");
+    const resultImg = document.getElementById("result-img");
+
+    function loadQuestion() {
+      fetch("/question")
+        .then(res => res.json())
+        .then(data => questionText.textContent = data.question);
+    }
+
+    function answer(choice) {
+      fetch("/answer", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ answer: choice })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.end) {
+          questionText.textContent = "あなたが思い浮かべたのは…「" + data.result + "」ですね！";
+          resultImg.src = data.image;
+          resultImg.style.display = "block";
+          document.getElementById("btn-area").innerHTML =
+            '<button onclick="location.href=\'/\'">もう一度プレイ</button>';
+        } else {
+          questionText.textContent = data.question;
+          resultImg.style.opacity = "none";
+        }
+      });
+    }
+
+    document.getElementById("yes-btn").addEventListener("click", () => answer("yes"));
+    document.getElementById("no-btn").addEventListener("click", () => answer("no"));
+
+    loadQuestion();
+  </script>
+</body>
+</html>

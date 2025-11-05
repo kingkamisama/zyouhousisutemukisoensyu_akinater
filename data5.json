@@ -1,0 +1,127 @@
+{
+    "features": {
+        "Mac":"その教員はMacBookを使っていましたか？",
+        "Korean":"その教員は韓国人ですか？",
+        "Toudai_hakushi":"その教員は東京大学の博士課程を卒業していますか？",
+        "genomu": "その教員はゲノム生物学についての研究をしていますか？",
+        "long_hair": "その教員は比較的髪の毛が長いですか？",
+        "tyantyanko": "その授業時間にたまにちゃんちゃんこのようなドンプクをきていましたか？",
+        "glasses": "その教員はメガネをかけていますか？",
+
+
+
+        ""
+    },
+    "sample": [
+        {
+            "name": "青戸等人教授",
+            "image": "",
+            "features": {
+                "Mac": false,
+                "Korean": false,
+                "Toudai_hakushi": true,
+                "genomu": false,
+                "long_hair": false,
+                "tyantyanko": false
+
+            }
+        },
+        {
+            "name": "阿部貴志教授",
+            "image": "",
+            "features": {
+
+            }
+        },
+         {
+            "name": "今村孝教授",
+            "image": "",
+            "features": {
+
+            }
+        },
+         {
+            "name": "大河正志教授",
+            "image": "",
+            "features": {
+
+            }
+        }, {
+            "name": "中野敬介教授",
+            "image": "",
+            "features": {
+
+            }
+        },
+         {
+            "name": "山﨑達也教授",
+            "image": "",
+            "features": {
+
+            }
+        },
+        {
+            "name": "山田寛喜教授",
+            "image": "",
+            "features": {
+
+            }
+        },
+        {
+            "name": "飯田祐輔准教授",
+            "image": "",
+            "features": {
+
+            }
+        },
+        {
+            "name": "石井望准教授",
+            "image": "",
+            "features": {
+
+            }
+        },
+        {
+            "name": "上野雄大准教授",
+            "image": "",
+            "features": {
+
+            }
+        },
+        {
+            "name": "高橋俊彦准教授",
+            "image": "",
+            "features": {
+
+            }
+        },
+        {
+            "name": "宮北和之准教授",
+            "image": "",
+            "features": {
+
+            }
+        },
+        {
+            "name": "高下大貴助教",
+            "image": "",
+            "features": {
+
+            }
+        },
+        {
+            "name": "萩原威志助教",
+            "image": "",
+            "features": {
+
+            }
+        },
+        {
+            "name": "余俊助教",
+            "image": "",
+            "features": {
+
+            }
+        }
+    ]
+}

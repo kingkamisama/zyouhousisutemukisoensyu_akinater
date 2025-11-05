@@ -8,6 +8,7 @@
   "samples": [
     {
       "name": "山田太郎先生",
+      "image": "",
       "features": {
         "is_science": true,
         "has_lab_in_engineering": true,
@@ -17,6 +18,7 @@
     },
     {
       "name": "佐藤花子先生",
+      "image": "",
       "features": {
         "is_science": false,
         "has_lab_in_engineering": false,

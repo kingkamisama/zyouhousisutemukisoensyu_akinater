@@ -70,7 +70,13 @@ def question():
     # 候補が1人になったら終了
     if len(session_state["data"]) == 1:
         result = session_state["data"][0]
-        return jsonify({"end": True, "result": result["name"], "image": ""})
+        image_url = url_for('static', filename=result.get("image", ""))
+        return jsonify({
+            "end": True,
+            "result": result["name"],
+            "image": image_url
+        })
+
 
     # 特徴が尽きたら終了
     if not session_state["remaining_features"]:

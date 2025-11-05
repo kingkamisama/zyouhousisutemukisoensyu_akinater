@@ -1,0 +1,28 @@
+{
+  "features": {
+    "is_science": "この先生は理系科目を担当していますか？",
+    "has_lab_in_engineering": "研究室は工学部棟にありますか？",
+    "wears_glasses": "メガネをかけていますか？",
+    "is_young": "若い先生ですか？"
+  },
+  "samples": [
+    {
+      "name": "山田太郎先生",
+      "features": {
+        "is_science": true,
+        "has_lab_in_engineering": true,
+        "wears_glasses": true,
+        "is_young": false
+      }
+    },
+    {
+      "name": "佐藤花子先生",
+      "features": {
+        "is_science": false,
+        "has_lab_in_engineering": false,
+        "wears_glasses": true,
+        "is_young": true
+      }
+    }
+  ]
+}

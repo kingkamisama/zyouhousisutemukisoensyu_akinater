@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>プレイ中 - 知能情報＋α教員アキネイター</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      text-align: center;
+      margin-top: 100px;
+      background-image: url("{{ url_for('static', filename='haikei2.jpg') }}");
+      background-size: cover;        /* 画面全体に広げる */
+      background-position: center;   /* 中央に配置 */
+      background-repeat: no-repeat;  /* 繰り返しなし */
+      background-attachment: fixed; /* ✅ スクロールに追従する設定 */
+      min-height: 100vh; 
+    }
+    /* 全体を中央寄せ */
+    .container {
+      position: relative;  /* ← ここを追加 */
+      display: block; 
+    height: 400px; /* 魔人+吹き出しが収まる高さ */
+   }
+
+    .image-area {
+    position: absolute;
+    left: 200px;  /* 魔人の左端位置 */
+    bottom: -10;    /* 下に揃える */
+    width: 360px;
+    }
+
+    .question-area {
+    position: absolute;
+    left: 650px;  /* 魔人の右側に吹き出し */
+    top: 50px;    /* 上からの位置調整 */
+    width: 500px;
+    text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+    }
+
+
+  #question {
+    font-size: 22px;
+    margin-bottom: 30px;
+    padding: 0px 30px 50px 30px;
+    text-align: center;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.4;
+    position: relative;
+    z-index: 1;
+  }
+
+  #question::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -20px;  /* ← 左方向に移動 */
+    width: 500px;  /* 吹き出し画像の幅 */
+    height: 200px; /* 高さ */
+    background-image: url("{{ url_for('static', filename='hukidasi.png') }}");
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: -1;   /* テキストの下に表示 */
+  }
+  #result-img {
+  width: 300px;          /* 表示幅を固定 */
+  height: 500px;         /* 表示高さを固定（正方形） */
+  object-fit: cover;     /* 中央トリミングして全体を埋める */
+  border-radius: 12px;   /* 角を丸く */
+  margin: 20px auto;     /* 上下に余白、中央寄せ */
+  display: none;         /* 最初は非表示 */
+  position: relative;    /* 位置調整用に相対指定 */
+}
+
+    button {
+      font-size: 22px;
+      margin: 10px;
+      padding: 10px 25px;
+      border-radius: 10px;
+      cursor: pointer;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+    iframe {
+      background-color: white !important;
+    }
+  </style>
+</head>
+<body>
+  <audio id="bgm" src="{{ url_for('static', filename='bgm.mp3') }}" loop></audio>
+  <audio id="se-click" src="{{ url_for('static', filename='click.mp3') }}"></audio>
+  <audio id="se-end" src="{{ url_for('static', filename='end.mp3') }}"></audio>
+  <audio id="se-result" src="{{ url_for('static', filename='result.mp3') }}"></audio>
+  <div class="container">
+    <!-- 左側：画像 -->
+    <div class="image-area">
+      <img src="{{ url_for('static', filename='kyozyu_akinater.png') }}" alt="アキネイター教授">
+    </div>
+
+    <!-- 右側：質問文とボタン -->
+    <div class="question-area">
+      <h2 id="question">読み込み中...</h2>
+
+      <img id="result-img" src="" alt="結果画像">
+
+      <div id="btn-area">
+        <button id="yes-btn">はい</button>
+        <button id="no-btn">いいえ</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const bgm = document.getElementById("bgm");
+    const seClick = document.getElementById("se-click");
+    const seEnd = document.getElementById("se-end");
+
+    let bgmStarted = false;
+
+    function startBGM() {
+      if (!bgmStarted) {
+        bgm.volume = 0.3;
+        bgm.play().catch(()=>{});
+        bgmStarted = true;
+      }
+    }
+
+    function playClick() {
+      seClick.currentTime = 0;
+      seClick.play().catch(()=>{});
+    }
+
+    function playEnd() {
+      seEnd.currentTime = 0;
+      seEnd.play().catch(()=>{});
+      bgm.pause();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      if (sessionStorage.getItem("startBGM") === "1") {
+        startBGM();
+        sessionStorage.removeItem("startBGM");
+      }
+    });
+    const questionText = document.getElementById("question");
+    const resultImg = document.getElementById("result-img");
+    const btnArea = document.getElementById("btn-area");
+
+    // 最初の質問を取得
+    function loadQuestion() {
+      fetch("/question", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({})  // 初回空データ
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.end) {
+            showResult(data);
+          } else {
+            showQuestion(data.question);
+          }
+        })
+        .catch(err => console.error("通信エラー:", err));
+    }
+
+    // 質問を表示
+    function showQuestion(text) {
+      questionText.textContent = text;
+      btnArea.innerHTML = `
+        <button id="yes-btn">はい</button>
+        <button id="no-btn">いいえ</button>
+      `;
+      document.getElementById("yes-btn").onclick = () => {
+        startBGM();
+        playClick();
+        answer("yes");
+      };
+
+      document.getElementById("no-btn").onclick = () => {
+        startBGM();
+        playClick();
+        answer("no");
+      };
+    }
+
+    // 回答送信
+    function answer(choice) {
+      fetch("/question", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ answer: choice })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.end) {
+            showResult(data);
+          } else {
+            showQuestion(data.question);
+          }
+        })
+        .catch(err => console.error("通信エラー:", err));
+    }
+
+    // 結果表示
+    function showResult(data) {
+      const seResult = document.getElementById("se-result");
+      seResult.currentTime = 0;
+      seResult.play().catch(()=>{});
+      questionText.textContent = "あなたが思い浮かべたのは…「" + data.result + "」ですね！";
+      resultImg.src = data.image;
+      resultImg.style.display = data.image ? "block" : "none";
+
+      if (data.url) {
+        btnArea.innerHTML = `
+          <iframe src="/proxy?url=${data.url}"
+                  width="500" height="600"
+                  style="border:0; margin-top:20px; border-radius:12px;">
+          </iframe>
+          <br>
+          <button id="end-btn">終了</button>
+        `;
+      } else {
+        btnArea.innerHTML = `<button id="end-btn">終了</button>`;
+      }
+      // iframe 読み込み後にスクロール位置を下げる
+      setTimeout(() => {
+        const iframe = document.querySelector("iframe");
+        if (iframe && iframe.contentWindow) {
+          iframe.contentWindow.scrollTo(0, 1800);
+        }
+      }, 1200);
+
+      document.getElementById("end-btn").onclick = () => {
+        playEnd();       
+        setTimeout(() => location.href='/', 300);
+      };
+    }
+
+    // 初回ロード
+    loadQuestion();
+  </script>
+</body>
+</html>

@@ -12,14 +12,14 @@
       background-size: cover;        /* 画面全体に広げる */
       background-position: center;   /* 中央に配置 */
       background-repeat: no-repeat;  /* 繰り返しなし */
-      background-attachment: fixed; /* ✅ スクロールに追従する設定 */
+      background-attachment: fixed; /* スクロールに追従*/
       min-height: 100vh; 
     }
     /* 全体を中央寄せ */
     .container {
-      position: relative;  /* ← ここを追加 */
+      position: relative;
       display: block; 
-    height: 400px; /* 魔人+吹き出しが収まる高さ */
+    height: 400px;
    }
 
     .image-area {
@@ -235,7 +235,7 @@
       } else {
         btnArea.innerHTML = `<button id="end-btn">終了</button>`;
       }
-      // iframe 読み込み後にスクロール位置を下げる
+      // iframe読み込み後にスクロール位置を下げる
       setTimeout(() => {
         const iframe = document.querySelector("iframe");
         if (iframe && iframe.contentWindow) {
